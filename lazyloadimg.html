@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>lazyload</title>
+  <style>
+    .container{
+      width:100%;
+    }
+    .img-area{
+      height:600px;
+      text-align: center
+    }
+
+  </style>
+</head>
+
+<body>
+<div class="container">
+  <div class="img-area">
+    <img class="my-photo" alt="loading" data-src="http://axuebin.com/lazyload/img/img1.png">
+  </div>
+  <div class="img-area">
+    <img class="my-photo" alt="loading" data-src="http://axuebin.com/lazyload/img/img2.png">
+  </div>
+  <div class="img-area">
+    <img class="my-photo" alt="loading" data-src="http://axuebin.com/lazyload/img/img3.png">
+  </div>
+  <div class="img-area">
+    <img class="my-photo" alt="loading" data-src="http://axuebin.com/lazyload/img/img4.png">
+  </div>
+  <div class="img-area">
+    <img class="my-photo" alt="loading" data-src="http://axuebin.com/lazyload/img/img5.png">
+  </div>
+  <div class="img-area">
+    <img class="my-photo" alt="loading" data-src="http://axuebin.com/lazyload/img/img6.png">
+  </div>
+  <div class="img-area">
+    <img class="my-photo" alt="loading" data-src="http://axuebin.com/lazyload/img/img7.png">
+  </div>
+  <div class="img-area">
+    <img class="my-photo" alt="loading" data-src="http://axuebin.com/lazyload/img/img8.png">
+  </div>
+  <div class="img-area">
+    <img class="my-photo" alt="loading" data-src="http://axuebin.com/lazyload/img/img9.png">
+  </div>
+  <div class="img-area">
+    <img class="my-photo" alt="loading" data-src="http://axuebin.com/lazyload/img/img10.png">
+  </div>
+</div>
+<script>
+  function isInSight(el) {
+    const bound = el.getBoundingClientRect();
+    const clientHeight = window.innerHeight;
+    console.log(bound)
+    //如果只考虑向下滚动加载
+    //const clientWidth=window.innerWeight;
+    return bound.top <= clientHeight + 100;
+  }
+
+  let index = 0;
+  function checkImgs() {
+    const imgs = document.querySelectorAll('.my-photo');
+    for (let i = index; i < imgs.length; i++) {
+      if (isInSight(imgs[i])) {
+        loadImg(imgs[i]);
+        index = i;
+      }
+    }
+  }
+
+  function loadImg(el) {
+    if (!el.src) {
+      const source = el.dataset.src;
+      el.src = source;
+    }
+  }
+
+  function throttle(fn, mustRun = 500) {
+    const timer = null;
+    let previous = null;
+    return function() {
+      const now = new Date();
+      const context = this;
+      const args = arguments;
+      if (!previous) {
+        previous = now;
+      }
+      const remaining = now - previous;
+      if (mustRun && remaining >= mustRun) {
+        fn.apply(context, args);
+        previous = now;
+      }
+    }
+  }
+</script>
+<script>
+
+  window.onload=checkImgs;
+  window.onscroll = throttle(checkImgs);
+</script>
+</body>
+
+</html>

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <script src="isBetter.js"></script>
+  <style>
+    body{
+      height:2000px;
+    }
+    #shopCart{
+      width:100px;
+      height:30px;
+      background: #f43530;
+      position: fixed;
+      bottom:20px;
+      right:20%;
+    }
+    #flyItem{
+      width:30px;
+      height: 30px;
+      border-radius:50%;
+      background: pink;
+      margin-top:200px;
+    }
+  </style>
+</head>
+<body>
+<button class="btnCart">clickme</button>
+<div id="flyItem"></div>
+<svg class="move_liner">
+  <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#cart-add"></use>
+</svg>
+<div id="shopCart">shocart</div>
+</body>
+<script>
+  var eleFlyElement = document.querySelector("#flyItem"), eleShopCart = document.querySelector("#shopCart");
+  var numberItem = 0;
+  // 抛物线运动
+  var myParabola = funParabola(eleFlyElement, eleShopCart, {
+    speed: 800,
+    curvature: 0.005,
+    complete: function() {
+      eleFlyElement.style.visibility = "hidden";
+      eleShopCart.querySelector("span").innerHTML = ++numberItem;
+    }
+  });
+  // 绑定点击事件
+  if (eleFlyElement && eleShopCart) {
+    [].slice.call(document.getElementsByClassName("btnCart")).forEach(function(button) {
+      button.addEventListener("click", function() {
+        // 滚动大小
+        var scrollLeft = document.documentElement.scrollLeft || document.body.scrollLeft || 0,
+          scrollTop = document.documentElement.scrollTop || document.body.scrollTop || 0;
+  /*
+        eleFlyElement.style.left = event.clientX + scrollLeft + "px";
+        eleFlyElement.style.top = event.clientY + scrollTop + "px";
+        eleFlyElement.style.visibility = "visible";*/
+
+        // 需要重定位
+        myParabola.position().move();
+      });
+    });
+  }
+</script>
+</html>
